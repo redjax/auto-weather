@@ -1,0 +1,12 @@
+[default]
+
+log_level = "INFO"
+celery_log_level = "info"
+
+[logging]
+
+# log_level = "DEBUG"
+
+[celery]
+
+# celery_log_level = "debug"

@@ -30,15 +30,41 @@ services:
     restart: unless-stopped
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: celery.Dockerfile
       args:
         UV_IMAGE_VER: ${UV_IMAGE_VER:-0.4.27}
         PYTHON_IMAGE_VER: ${PYTHON_IMAGE_VER:-3.12-slim}
-    command: ['uv', 'run', 'celery', '-A', 'auto_weather.celeryapp.celery_app.app', "worker", '-l', 'info']
+    command: ['uv', 'run', 'celery', '-A', 'auto_weather.celeryapp.celery_main.celery_app', "worker", '-l', 'info']
     environment:
-      - BROKER_URL=amqp://${RABBITMQ_USER:-rabbitmq}:${RABBITMQ_PASSWORD:-rabbitmq}@rabbitmq:5672//
-      - RESULT_BACKEND=redis://redis:6379/0
-      - C_FORCE_ROOT=true
+      CELERY_TZ: ${TZ:-Etc/UTC}
+      CELERY_BROKER_URL: amqp://${RABBITMQ_USER:-rabbitmq}:${RABBITMQ_PASSWORD:-rabbitmq}@rabbitmq:5672//
+      CELERY_BACKEND_URL: redis://redis:6379/0
+      C_FORCE_ROOT: true
+    volumes:
+      - ./src:/project/src
+      - ./alembic.ini:/project/alembic.ini
+    depends_on:
+      - rabbitmq
+      - redis
+    networks:
+      - auto-weathernet
+
+  celery_beat:
+    container_name: auto-weather-celery-beat
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: celery.Dockerfile
+      args:
+        UV_IMAGE_VER: ${UV_IMAGE_VER:-0.4.27}
+        PYTHON_IMAGE_VER: ${PYTHON_IMAGE_VER:-3.12-slim}
+    command: ['uv', 'run', 'celery', '-A', 'auto_weather.celeryapp.celery_main.celery_app', "beat", '-l', '${CELERY_LOG_LEVEL:-info}']
+    environment:
+      CELERY_TZ: ${TZ:-Etc/UTC}
+      CELERY_BROKER_URL: amqp://${RABBITMQ_USER:-rabbitmq}:${RABBITMQ_PASSWORD:-rabbitmq}@rabbitmq:5672//
+      CELERY_BACKEND_URL: redis://redis:6379/0
+      CELERY_LOG_LEVEL: ${CELERY_LOG_LEVEL:-info}
+      C_FORCE_ROOT: true
     volumes:
       - ./src:/project/src
       - ./alembic.ini:/project/alembic.ini

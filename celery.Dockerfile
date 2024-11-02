@@ -16,4 +16,8 @@ RUN uv sync --dev --all-extras && \
 
 FROM base AS run
 
+COPY --from=base /project /project
+
+WORKDIR /project
+
 CMD ["echo", "hello, world"]
