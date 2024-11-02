@@ -1,0 +1,49 @@
+---
+networks:
+  auto-weathernet: {}
+
+services:
+
+  rabbitmq:
+    image: rabbitmq
+    container_name: auto-weather-rabbitmq
+    restart: unless-stopped
+    ports:
+      - ${RABBITMQ_PORT:-5672}:5672
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-rabbitmq}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-rabbitmq}
+    networks:
+      - auto-weathernet
+
+  redis:
+    image: redis
+    container_name: auto-weather-redis
+    restart: unless-stopped
+    ports:
+    - ${REDIS_PORT:-6379}:6379
+    networks:
+      - auto-weathernet
+  
+  celery_worker:
+    container_name: auto-weather-celery-worker
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        UV_IMAGE_VER: ${UV_IMAGE_VER:-0.4.27}
+        PYTHON_IMAGE_VER: ${PYTHON_IMAGE_VER:-3.12-slim}
+    command: ['uv', 'run', 'celery', '-A', 'auto_weather.celeryapp.celery_app.app', "worker", '-l', 'info']
+    environment:
+      - BROKER_URL=amqp://${RABBITMQ_USER:-rabbitmq}:${RABBITMQ_PASSWORD:-rabbitmq}@rabbitmq:5672//
+      - RESULT_BACKEND=redis://redis:6379/0
+      - C_FORCE_ROOT=true
+    volumes:
+      - ./src:/project/src
+      - ./alembic.ini:/project/alembic.ini
+    depends_on:
+      - rabbitmq
+      - redis
+    networks:
+      - auto-weathernet
