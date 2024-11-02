@@ -1,6 +1,8 @@
 from loguru import logger as log
 import sys
 
+import json
+
 from auto_weather import weatherapi_client
 
 log.remove(0)
