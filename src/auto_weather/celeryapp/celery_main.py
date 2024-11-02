@@ -1,10 +1,11 @@
-from .settings import CELERY_SETTINGS, BACKEND_URL, BROKER_URL
+from __future__ import annotations
 
 from auto_weather.celeryapp.tasks.scheduled.demo import TASK_SCHEDULE_1m_say_hello
 
+from .settings import BACKEND_URL, BROKER_URL, CELERY_SETTINGS
+
 from celery import Celery, current_app
 from celery.result import AsyncResult
-
 
 INCLUDE_TASK_PATHS = [
     "auto_weather.celeryapp.tasks.scheduled",
