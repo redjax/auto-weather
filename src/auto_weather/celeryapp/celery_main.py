@@ -7,6 +7,8 @@ from .settings import BACKEND_URL, BROKER_URL, CELERY_SETTINGS
 from celery import Celery, current_app
 from celery.result import AsyncResult
 
+from loguru import logger as log
+
 INCLUDE_TASK_PATHS = [
     "auto_weather.celeryapp.tasks.scheduled",
     "auto_weather.celeryapp.tasks.adhoc",
@@ -63,7 +65,7 @@ def check_task(task_id: str = None, app: Celery = celery_app) -> AsyncResult | N
     assert task_id, ValueError("Missing a Celery task_id")
     task_id: str = f"{task_id}"
 
-    # log.info(f"Checking Celery task '{task_id}'")
+    log.info(f"Checking Celery task '{task_id}'")
     print(f"Checking Celery task '{task_id}'")
     try:
         task_res: AsyncResult = app.AsyncResult(task_id)
@@ -73,8 +75,7 @@ def check_task(task_id: str = None, app: Celery = celery_app) -> AsyncResult | N
         msg = Exception(
             f"Unhandled exception getting task by ID '{task_id}'. Details: {exc}"
         )
-        # log.error(msg)
-        print(f"[ERROR] {msg}")
+        log.error(msg)
 
         return None
 

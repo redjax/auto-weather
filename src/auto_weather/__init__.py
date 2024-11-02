@@ -1,4 +1,4 @@
 from __future__ import annotations
+from loguru import logger
 
-def main() -> None:
-    print("Hello from auto-weather!")
+logger.disable("auto_weather")
