@@ -3,6 +3,7 @@ import sys
 
 import json
 
+from auto_weather.core import setup
 from auto_weather import weatherapi_client
 from auto_weather.domain import (
     CurrentWeatherIn,
@@ -14,15 +15,6 @@ from auto_weather.domain import (
     LocationOut,
     LocationRepository,
 )
-
-
-log.remove(0)
-log.add(
-    sys.stderr,
-    format="{time:YYYY-MM-DD HH:mm:ss} | [{level}] | ({module}.{function}:{line}) | > {message}",
-    level="DEBUG",
-)
-log.enable("auto_weather")
 
 
 def main():
@@ -39,4 +31,7 @@ def main():
 
 
 if __name__ == "__main__":
+    setup.setup_loguru_logging(log_level="DEBUG")
+    setup.setup_database()
+
     main()
