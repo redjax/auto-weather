@@ -403,11 +403,19 @@ You must edit migrations/env.py to configure your project.
 If you're using a "src" layout, add this to the top of your code:
 
 import sys
-
 sys.path.append("./src")
 
 Import your SQLAlchemy models (look for the commented sections describing model imports),
 set your SQLAlchemy Base.metadata, and set the database URI.
+
+Import 'unquote' from the urllib library. This is used to convert the SQLAlchemy database URI
+to a compatible URL. This app assumes you have a get_db_engine method to return an initialized
+SQLAlchemy engine from your configuration.
+
+from app_name.core.depends.db_depends import get_db_engine, get_db_uri
+
+from urllib.parse import unquote
+
 
 If you're using Dynaconf, i.e. in a `db.settings.DB_SETTINGS` object, you can set the
 database URI like:
