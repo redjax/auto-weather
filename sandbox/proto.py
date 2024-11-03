@@ -33,6 +33,20 @@ def main():
     )
     log.info(f"Current weather: {current_weather}")
 
+    # current_weather_model = weatherapi_client.convert.current_weather_schema_to_model(
+    #     current_weather
+    # )
+    # log.debug(f"Current weather model: {current_weather_model}")
+
+    log.info("Saving current weather & location to database")
+    try:
+        weatherapi_client.client.db_ops.save_current_weather(
+            current_weather_schema=current_weather, location_schema=location
+        )
+    except Exception as exc:
+        msg = f"({type(exc)}) Error saving current weather & location to database. Details: {exc}"
+        log.error(msg)
+
 
 if __name__ == "__main__":
     setup.setup_loguru_logging(log_level="DEBUG")
