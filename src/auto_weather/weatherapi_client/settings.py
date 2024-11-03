@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
-import logging
 
-log = logging.getLogger(__name__)
+
+from loguru import logger as log
 
 from dynaconf import Dynaconf
 

@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-import logging
 
-log = logging.getLogger(__name__)
+from loguru import logger as log
 
 from auto_weather.core import http_lib
 from auto_weather.weatherapi_client.constants import WEATHERAPI_BASE_URL

@@ -7,13 +7,16 @@ Users can call the client to build a request, decode a response, encode data for
 from __future__ import annotations
 
 import json
-import logging
+
 from pathlib import Path
 import typing as t
+
+import logging
 
 log = logging.getLogger(__name__)
 
 import httpx
+
 
 def build_request(
     method: str = "GET",

@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from contextlib import AbstractContextManager, contextmanager
-import logging
+
 from pathlib import Path
 import typing as t
+import logging
 
 log = logging.getLogger(__name__)
 

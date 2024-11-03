@@ -11,7 +11,9 @@ dependencies = [
     "hishel>=0.0.33",
     "httpx>=0.27.2",
     "loguru>=0.7.2",
+    "pydantic>=2.9.2",
     "redis>=5.2.0",
+    "sqlalchemy>=2.0.36",
 ]
 
 [project.scripts]
