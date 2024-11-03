@@ -20,13 +20,17 @@ from auto_weather.domain import (
 def main():
     log.info("Prototype start")
 
-    current_weather_dict = weatherapi_client.client.current.get_current_weather()
-    log.debug(f"Current weather ({type(current_weather_dict)}): {current_weather_dict}")
+    current_weather_res = weatherapi_client.client.current.get_current_weather()
+    log.debug(f"Current weather ({type(current_weather_res)}): {current_weather_res}")
 
-    location = LocationIn.model_validate(current_weather_dict["location"])
+    location = weatherapi_client.convert.location_dict_to_schema(
+        current_weather_res["location"]
+    )
     log.debug(f"Location: {location}")
 
-    current_weather = CurrentWeatherIn.model_validate(current_weather_dict["current"])
+    current_weather = weatherapi_client.convert.current_weather_dict_to_schema(
+        current_weather_res["current"]
+    )
     log.info(f"Current weather: {current_weather}")
 
 
