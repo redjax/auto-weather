@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from loguru import logger as log
 import typing as t
 
 from auto_weather.core.db import Base, annotated
+
+from loguru import logger as log
 import sqlalchemy as sa
 import sqlalchemy.exc as sa_exc
 import sqlalchemy.orm as so
-
 
 class LocationModel(Base):
     __tablename__ = "weatherapi_location"

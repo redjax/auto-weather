@@ -1,10 +1,7 @@
 from __future__ import annotations
 
 from decimal import Decimal
-
 import typing as t
-
-from loguru import logger as log
 
 from .location import LocationIn, LocationOut
 from .weather.current import CurrentWeatherIn, CurrentWeatherOut
@@ -14,6 +11,7 @@ from .weather.weather_alerts import (
     WeatherAlertsOut,
 )
 
+from loguru import logger as log
 from pydantic import (
     BaseModel,
     ConfigDict,
@@ -22,7 +20,6 @@ from pydantic import (
     computed_field,
     field_validator,
 )
-
 
 class APIResponseWeatherBase(BaseModel):
     location: t.Union[LocationIn, LocationOut]

@@ -1,6 +1,6 @@
-import time
+from __future__ import annotations
 
-from loguru import logger as log
+import time
 
 from auto_weather.core import http_lib
 from auto_weather.weatherapi_client.settings import weatherapi_settings
@@ -8,7 +8,7 @@ from auto_weather.weatherapi_client.settings import weatherapi_settings
 from . import requests
 
 import httpx
-
+from loguru import logger as log
 
 def get_current_weather(
     location: str = weatherapi_settings.location,

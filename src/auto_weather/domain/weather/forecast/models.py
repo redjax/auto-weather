@@ -1,17 +1,15 @@
 from __future__ import annotations
 
 import datetime as dt
-
 import typing as t
 
-from loguru import logger as log
-
 from auto_weather.core.db import Base, annotated
+
+from loguru import logger as log
 import sqlalchemy as sa
 import sqlalchemy.exc as sa_exc
 import sqlalchemy.orm as so
 from sqlalchemy.types import JSON
-
 
 class ForecastJSONModel(Base):
     __tablename__ = "weatherapi_forecast_json"

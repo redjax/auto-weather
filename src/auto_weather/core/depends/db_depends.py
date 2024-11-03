@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-
-import typing as t
-
 import logging
+import typing as t
 
 log = logging.getLogger(__name__)
 
@@ -12,7 +10,6 @@ from auto_weather.core.db.settings import DB_SETTINGS
 
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-
 
 def get_db_uri(
     drivername: str = DB_SETTINGS.get("DB_drivername", default="sqlite+pysqlite"),

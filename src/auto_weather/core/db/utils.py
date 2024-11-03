@@ -1,11 +1,9 @@
 from __future__ import annotations
 
-
+import logging
 from pathlib import Path
 import sqlite3
 import typing as t
-
-import logging
 
 log = logging.getLogger(__name__)
 

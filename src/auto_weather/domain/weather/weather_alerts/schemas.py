@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from pydantic import BaseModel
 
-
 class WeatherAlertIn(BaseModel):
     headline: str | None = None
     msgtype: str | None = None

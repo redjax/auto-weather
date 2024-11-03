@@ -1,12 +1,13 @@
-from loguru import logger as log
+from __future__ import annotations
 
 from auto_weather.domain import (
     CurrentWeatherIn,
-    LocationIn,
-    CurrentWeatherOut,
     CurrentWeatherModel,
+    CurrentWeatherOut,
+    LocationIn,
 )
 
+from loguru import logger as log
 
 @log.catch
 def current_weather_dict_to_schema(current_weather_dict: dict):

@@ -4,7 +4,6 @@ from decimal import Decimal
 import typing as t
 
 from loguru import logger as log
-
 from pydantic import (
     BaseModel,
     ConfigDict,
@@ -13,7 +12,6 @@ from pydantic import (
     computed_field,
     field_validator,
 )
-
 
 class LocationIn(BaseModel):
     name: str

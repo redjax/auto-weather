@@ -5,9 +5,7 @@ import time
 
 log = logging.getLogger(__name__)
 
-from auto_weather.weatherapi_client.client import requests
-from auto_weather.weatherapi_client.settings import weatherapi_settings
-
+from auto_weather.core import http_lib
 from auto_weather.core.depends.db_depends import get_session_pool
 from auto_weather.domain.location import (
     LocationIn,
@@ -38,9 +36,10 @@ from auto_weather.domain.weather.forecast import (
     ForecastJSONOut,
     ForecastJSONRepository,
 )
-from auto_weather.core import http_lib
-import httpx
+from auto_weather.weatherapi_client.client import requests
+from auto_weather.weatherapi_client.settings import weatherapi_settings
 
+import httpx
 
 def save_location(location: LocationIn) -> LocationOut:
     session_pool = get_session_pool()

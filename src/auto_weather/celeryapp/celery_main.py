@@ -6,7 +6,6 @@ from .settings import BACKEND_URL, BROKER_URL, CELERY_SETTINGS
 
 from celery import Celery, current_app
 from celery.result import AsyncResult
-
 from loguru import logger as log
 
 INCLUDE_TASK_PATHS = [

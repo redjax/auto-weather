@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-
 import typing as t
 
-from loguru import logger as log
+from auto_weather.core.db.base import BaseRepository
 
 from .models import (
     CurrentWeatherAirQualityModel,
@@ -11,11 +10,10 @@ from .models import (
     CurrentWeatherModel,
 )
 
-from auto_weather.core.db.base import BaseRepository
+from loguru import logger as log
 import sqlalchemy as sa
 import sqlalchemy.exc as sa_exc
 import sqlalchemy.orm as so
-
 
 class CurrentWeatherRepository(BaseRepository[CurrentWeatherModel]):
     def __init__(self, session: so.Session):

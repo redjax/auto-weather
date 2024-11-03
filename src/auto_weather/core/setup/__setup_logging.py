@@ -1,6 +1,8 @@
-import sys
-from loguru import logger
+from __future__ import annotations
 
+import sys
+
+from loguru import logger
 
 def setup_loguru_logging(
     log_level: str = "INFO", enable_loggers: list[str] = ["auto_weather"]
