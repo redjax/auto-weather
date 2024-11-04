@@ -117,7 +117,7 @@ def task_weather_forecast(
 
 
 @log.catch
-@celery_app.task(name="current_weather_count")
+@celery_app.task(name="weatherapi-current-weather-count")
 def task_count_current_weather_rows():
     session_pool = get_session_pool()
 
@@ -132,7 +132,7 @@ def task_count_current_weather_rows():
 
 
 @log.catch
-@celery_app.task(name="weather_forecast_count")
+@celery_app.task(name="weatherapi-forecast-count")
 def task_count_weather_forecast_rows():
     session_pool = get_session_pool()
 
