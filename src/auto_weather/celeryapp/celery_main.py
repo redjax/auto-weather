@@ -58,7 +58,8 @@ def scheduled_tasks(sender, **kwargs):
     celery_app.conf.beat_schedule = {
         **TASK_SCHEDULE_1m_say_hello,
         **TASK_SCHEDULE_15m_weatherapi_current_weather,
-        **TASK_SCHEDULE_test_weatherapi_current_weather,
+        ## Uncomment to get current weather every minute
+        # **TASK_SCHEDULE_test_weatherapi_current_weather,
     }
 
 
