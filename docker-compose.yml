@@ -134,7 +134,7 @@ services:
     volumes:
       - ./src:/project/src
       - ./alembic.ini:/project/alembic.ini
-      - ./logs:/project/logs
+      # - ./logs:/project/logs
     depends_on:
       - rabbitmq
       - redis
@@ -172,7 +172,7 @@ services:
     volumes:
       - ./src:/project/src
       - ./alembic.ini:/project/alembic.ini
-      - ./logs:/project/logs
+      # - ./logs:/project/logs
     depends_on:
       - rabbitmq
       - redis
