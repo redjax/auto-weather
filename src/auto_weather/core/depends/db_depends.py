@@ -11,8 +11,9 @@ from auto_weather.core.db.settings import DB_SETTINGS
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 
+
 def get_db_uri(
-    drivername: str = DB_SETTINGS.get("DB_drivername", default="sqlite+pysqlite"),
+    drivername: str = DB_SETTINGS.get("DB_DRIVERNAME", default="sqlite+pysqlite"),
     username: str | None = DB_SETTINGS.get("DB_USERNAME", default=None),
     password: str | None = DB_SETTINGS.get("DB_PASSWORD", default=None),
     host: str | None = DB_SETTINGS.get("DB_HOST", default=None),
@@ -20,6 +21,7 @@ def get_db_uri(
     database: str = DB_SETTINGS.get("DB_DATABASE", default="demo.sqlite"),
     as_str: bool = False,
 ) -> sa.URL:
+
     db_uri: sa.URL = db.get_db_uri(
         drivername=drivername,
         username=username,

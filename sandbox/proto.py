@@ -10,6 +10,8 @@ from auto_weather.domain import (
     CurrentWeatherOut,
     CurrentWeatherModel,
     CurrentWeatherRepository,
+)
+from auto_weather.domain import (
     LocationIn,
     LocationModel,
     LocationOut,
@@ -17,9 +19,7 @@ from auto_weather.domain import (
 )
 
 
-def main():
-    log.info("Prototype start")
-
+def demo_weatherapi_current_weather():
     current_weather_res = weatherapi_client.client.current.get_current_weather()
     log.debug(f"Current weather ({type(current_weather_res)}): {current_weather_res}")
 
@@ -33,11 +33,6 @@ def main():
     )
     log.info(f"Current weather: {current_weather}")
 
-    # current_weather_model = weatherapi_client.convert.current_weather_schema_to_model(
-    #     current_weather
-    # )
-    # log.debug(f"Current weather model: {current_weather_model}")
-
     log.info("Saving current weather & location to database")
     try:
         weatherapi_client.client.db_ops.save_current_weather(
@@ -46,6 +41,12 @@ def main():
     except Exception as exc:
         msg = f"({type(exc)}) Error saving current weather & location to database. Details: {exc}"
         log.error(msg)
+
+
+def main():
+    log.info("Prototype start")
+
+    demo_weatherapi_current_weather()
 
 
 if __name__ == "__main__":

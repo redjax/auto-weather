@@ -21,3 +21,24 @@ COPY --from=base /project /project
 WORKDIR /project
 
 CMD ["echo", "hello, world"]
+
+FROM base AS run_scripts
+
+COPY --from=base /project /project
+
+WORKDIR /project
+
+COPY scripts /project/scripts
+
+CMD ["echo", "hello, world"]
+
+FROM base AS alembic
+
+COPY --from=base /project /project
+
+WORKDIR /project
+
+COPY alembic.ini /project/alembic.ini
+COPY migrations /project/migrations
+
+CMD ["echo", "hello, world"]

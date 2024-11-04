@@ -1,0 +1,1 @@
+from .tasks import TASK_SCHEDULE_15m_weatherapi_current_weather

@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 from auto_weather.celeryapp.tasks.scheduled.demo import TASK_SCHEDULE_1m_say_hello
+from auto_weather.celeryapp.tasks.scheduled.weather.weatherapi import (
+    TASK_SCHEDULE_15m_weatherapi_current_weather,
+)
 
 from .settings import BACKEND_URL, BROKER_URL, CELERY_SETTINGS
 
@@ -11,6 +14,7 @@ from loguru import logger as log
 INCLUDE_TASK_PATHS = [
     "auto_weather.celeryapp.tasks.scheduled",
     "auto_weather.celeryapp.tasks.adhoc",
+    "auto_weather.celeryapp.tasks.adhoc.weather",
 ]
 
 celery_app = Celery(
@@ -23,6 +27,8 @@ celery_app = Celery(
 celery_app.conf.update(
     timzone=CELERY_SETTINGS.get("CELERY_TZ", default="Etc/UTC"), enable_utc=True
 )
+
+celery_app.autodiscover_tasks(INCLUDE_TASK_PATHS)
 
 
 def print_discovered_tasks() -> list[str]:
@@ -43,6 +49,7 @@ def scheduled_tasks(sender, **kwargs):
     ## Configure celery beat schedule
     celery_app.conf.beat_schedule = {
         **TASK_SCHEDULE_1m_say_hello,
+        **TASK_SCHEDULE_15m_weatherapi_current_weather,
     }
 
 
