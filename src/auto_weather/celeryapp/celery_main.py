@@ -3,6 +3,7 @@ from __future__ import annotations
 from auto_weather.celeryapp.tasks.scheduled.demo import TASK_SCHEDULE_1m_say_hello
 from auto_weather.celeryapp.tasks.scheduled.weather.weatherapi import (
     TASK_SCHEDULE_15m_weatherapi_current_weather,
+    TASK_SCHEDULE_test_weatherapi_current_weather,
 )
 
 from .settings import BACKEND_URL, BROKER_URL, CELERY_SETTINGS
@@ -10,6 +11,9 @@ from .settings import BACKEND_URL, BROKER_URL, CELERY_SETTINGS
 from celery import Celery, current_app
 from celery.result import AsyncResult
 from loguru import logger as log
+
+log.add("logs/celery.log", rotation="15 MB", retention=3)
+log.add("logs/celery.error.log", rotation="15 MB", retention=3, level="ERROR")
 
 INCLUDE_TASK_PATHS = [
     "auto_weather.celeryapp.tasks.scheduled",
@@ -54,6 +58,7 @@ def scheduled_tasks(sender, **kwargs):
     celery_app.conf.beat_schedule = {
         **TASK_SCHEDULE_1m_say_hello,
         **TASK_SCHEDULE_15m_weatherapi_current_weather,
+        **TASK_SCHEDULE_test_weatherapi_current_weather,
     }
 
 

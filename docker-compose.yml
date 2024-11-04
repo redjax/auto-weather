@@ -1,7 +1,11 @@
 ---
 networks:
   auto-weathernet: {}
+
+volumes:
   postgres_data: {}
+  rabbitmq_data: {}
+  redis_data: {}
 
 services:
 
@@ -14,6 +18,8 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-rabbitmq}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-rabbitmq}
+    volumes:
+      - ${RABBITMQ_DATA_DIR:-rabbitmq_data}:/var/lib/rabbitmq
     networks:
       - auto-weathernet
 
@@ -23,6 +29,8 @@ services:
     restart: unless-stopped
     ports:
     - ${REDIS_PORT:-6379}:6379
+    volumes:
+      - ${REDIS_DATA_DIR:-redis_data}:/data
     networks:
       - auto-weathernet
 
@@ -111,6 +119,9 @@ services:
       CELERY_BACKEND_URL: redis://redis:6379/0
       C_FORCE_ROOT: true
 
+      DYNACONF_WEATHERAPI_LOCATION_NAME: ${WEATHERAPI_LOCATION_NAME:-london}
+      DYNACONF_WEATHERAPI_API_KEY: ${WEATHERAPI_API_KEY}
+
       DYNACONF_DB_TYPE: ${DB_TYPE:-postgres}
       DYNACONF_DB_DRIVERNAME: ${DB_DRIVERNAME:-postgresql+psycopg2}
       DYNACONF_DB_HOST: ${DB_HOST:-postgres}
@@ -123,6 +134,7 @@ services:
     volumes:
       - ./src:/project/src
       - ./alembic.ini:/project/alembic.ini
+      - ./logs:/project/logs
     depends_on:
       - rabbitmq
       - redis
@@ -160,6 +172,7 @@ services:
     volumes:
       - ./src:/project/src
       - ./alembic.ini:/project/alembic.ini
+      - ./logs:/project/logs
     depends_on:
       - rabbitmq
       - redis

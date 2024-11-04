@@ -27,16 +27,22 @@ from auto_weather import weatherapi_client
 @log.catch
 @celery_app.task(name="weatherapi-current-weather")
 def task_weatherapi_current_weather(
+    use_cache: bool = False,
     api_key: str = weatherapi_settings.api_key,
     location: str = weatherapi_settings.location,
 ):
     """Request & save current weather from WeatherAPI."""
+    print(f"API key: {api_key}, location: {location}")
+
     try:
         current_weather_res = weatherapi_client.client.current.get_current_weather(
-            api_key=api_key, location=location
+            api_key=api_key, location=location, use_cache=use_cache
         )
         log.debug(
             f"Current weather ({type(current_weather_res)}): {current_weather_res}"
+        )
+        print(
+            f"[TEMP] Current weather ({type(current_weather_res)}): {current_weather_res}"
         )
     except Exception as exc:
         log.error(
