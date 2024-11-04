@@ -1,10 +1,15 @@
 from __future__ import annotations
+from typing import NoReturn
 
 from auto_weather.domain import (
     CurrentWeatherIn,
     CurrentWeatherModel,
     CurrentWeatherOut,
     LocationIn,
+    ForecastJSONIn,
+    ForecastJSONModel,
+    ForecastJSONOut,
+    ForecastJSONRepository,
 )
 
 from loguru import logger as log
@@ -39,9 +44,9 @@ def current_weather_schema_to_model(current_weather_schema: CurrentWeatherIn):
 
 
 @log.catch
-def current_weather_model_to_schema(current_weather_model: CurrentWeatherModel):
-    current_weather_schema: CurrentWeatherOut = CurrentWeatherOut.model_validate(
-        current_weather_model.__dict__
+def weather_forecast_dict_to_schema(weather_forecast_dict: dict) -> ForecastJSONIn:
+    weather_forecast_json: ForecastJSONIn = ForecastJSONIn(
+        forecast_json=weather_forecast_dict
     )
 
-    return current_weather_schema
+    return weather_forecast_json

@@ -82,6 +82,38 @@ def task_weatherapi_current_weather(
     return return_obj
 
 
+# @log.catch
+# @celery_app.task(name="request_weather_forecast")
+# def task_weather_forecast(
+#     location: str,
+# ) -> dict[str, domain.weather.forecast.ForecastJSONOut]:
+#     if location is None:
+#         log.warning(
+#             "No location detected. Set a WEATHERAPI_LOCATION_NAME environnment variable with a value of a location to search weatherAPI for."
+#         )
+
+#         return None
+
+#     log.info("Getting weather forecast in background")
+
+#     try:
+#         weather_forecast: domain.weather.forecast.ForecastJSONOut = (
+#             weatherapi_client.client.get_weather_forecast(location=location)
+#         )
+#     except Exception as exc:
+#         msg = f"({type(exc)}) Error running background task to get weather forecast. Details: {exc}"
+#         log.error(msg)
+
+#         raise exc
+
+#     if weather_forecast:
+#         log.info(f"Weather forecast: {weather_forecast}")
+#         return {"weather_forecast": weather_forecast.model_dump()}
+#     else:
+#         log.warning("Weather forecast object is None. An error may have occurred.")
+#         return {"weather_forecast": None}
+
+
 @log.catch
 @celery_app.task(name="current_weather_count")
 def task_count_current_weather_rows():
