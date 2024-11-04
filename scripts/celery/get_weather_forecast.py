@@ -16,7 +16,7 @@ from auto_weather.weatherapi_client.settings import WEATHERAPI_SETTINGS
 
 def run(task_check_sleep: int = 5, location_name: str = None):
     # task_result: AsyncResult = task_count_current_weather_rows.delay()
-    task_result: AsyncResult = celery_app.send_task("weatherapi-current-weather")
+    task_result: AsyncResult = celery_app.send_task("weatherapi-weather-forecast")
 
     while not check_task(task_id=task_result.task_id, app=celery_app).ready():
         log.info(f"Task {task_result.task_id} is in state [{task_result.state}]")
@@ -35,7 +35,7 @@ def run(task_check_sleep: int = 5, location_name: str = None):
         f"Task {task_result.task_id} ready=True. State: {check_task(task_id=task_result.task_id, app=celery_app).state}"
     )
 
-    log.info("Finish getting current weather")
+    log.info("Finish getting weather forecast")
 
     if task_result.result is None:
         log.warning("Result is None, an error may have occurred")
@@ -54,11 +54,11 @@ def run(task_check_sleep: int = 5, location_name: str = None):
 
 
 def main(task_check_sleep: int = 5):
-    current_weather = run(task_check_sleep=task_check_sleep)
-    if current_weather is None:
-        log.warning("current_weather object is None, an error may have occurred")
+    weather_forecast = run(task_check_sleep=task_check_sleep)
+    if weather_forecast is None:
+        log.warning("weather_forecast object is None, an error may have occurred")
     else:
-        log.info(f"Current weather result: {current_weather}")
+        log.info(f"Weather forecast result: {weather_forecast}")
 
 
 if __name__ == "__main__":

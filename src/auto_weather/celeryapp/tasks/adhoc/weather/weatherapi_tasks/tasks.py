@@ -97,10 +97,8 @@ def task_weather_forecast(
     log.info("Getting weather forecast in background")
 
     try:
-        weather_forecast: domain.weather.forecast.ForecastJSONOut = (
-            weatherapi_client.client.get_weather_forecast(
-                use_cache=use_cache, location=location
-            )
+        weather_forecast_res: dict = weatherapi_client.client.get_weather_forecast(
+            use_cache=use_cache, location=location
         )
     except Exception as exc:
         msg = f"({type(exc)}) Error running background task to get weather forecast. Details: {exc}"
@@ -108,7 +106,12 @@ def task_weather_forecast(
 
         raise exc
 
-    if weather_forecast:
+    if weather_forecast_res:
+        weather_forecast: domain.weather.forecast.ForecastJSONIn = (
+            domain.weather.forecast.ForecastJSONIn(
+                forecast_json=weather_forecast_res["forecast"]
+            )
+        )
         log.info(f"Weather forecast: {weather_forecast}")
         return {"weather_forecast": weather_forecast.model_dump()}
     else:
