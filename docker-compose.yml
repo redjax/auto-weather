@@ -1,6 +1,7 @@
 ---
 networks:
-  auto-weathernet: {}
+  auto-weathernet:
+    external: true 
 
 volumes:
   postgres_data: {}
