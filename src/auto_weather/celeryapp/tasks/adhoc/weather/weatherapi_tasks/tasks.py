@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from celery import shared_task
+
 from auto_weather import domain, weatherapi_client
 from auto_weather.celeryapp.celery_main import celery_app
 from auto_weather.core.depends.db_depends import get_session_pool
@@ -17,8 +19,10 @@ from auto_weather.weatherapi_client.settings import weatherapi_settings
 
 from loguru import logger as log
 
+
 @log.catch
-@celery_app.task(name="weatherapi-current-weather")
+# @celery_app.task(name="weatherapi-current-weather")
+@shared_task(name="weatherapi-current-weather")
 def task_weatherapi_current_weather(
     use_cache: bool = False,
     api_key: str = weatherapi_settings.api_key,
@@ -33,9 +37,6 @@ def task_weatherapi_current_weather(
         )
         log.debug(
             f"Current weather ({type(current_weather_res)}): {current_weather_res}"
-        )
-        print(
-            f"[TEMP] Current weather ({type(current_weather_res)}): {current_weather_res}"
         )
     except Exception as exc:
         log.error(
@@ -76,7 +77,8 @@ def task_weatherapi_current_weather(
 
 
 @log.catch
-@celery_app.task(name="weatherapi-weather-forecast")
+# @celery_app.task(name="weatherapi-weather-forecast")
+@shared_task(name="weatherapi-weather-forecast")
 def task_weather_forecast(
     use_cache: bool = False, location: str = weatherapi_settings.location
 ) -> dict[str, domain.weather.forecast.ForecastJSONOut]:
@@ -113,7 +115,8 @@ def task_weather_forecast(
 
 
 @log.catch
-@celery_app.task(name="weatherapi-current-weather-count")
+# @celery_app.task(name="weatherapi-current-weather-count")
+@shared_task(name="weatherapi-current-weather-count")
 def task_count_current_weather_rows():
     session_pool = get_session_pool()
 
@@ -128,7 +131,8 @@ def task_count_current_weather_rows():
 
 
 @log.catch
-@celery_app.task(name="weatherapi-forecast-count")
+# @celery_app.task(name="weatherapi-forecast-count")
+@shared_task(name="weatherapi-forecast-count")
 def task_count_weather_forecast_rows():
     session_pool = get_session_pool()
 

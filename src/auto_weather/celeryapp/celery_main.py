@@ -19,7 +19,6 @@ log.add("logs/celery.error.log", rotation="15 MB", retention=3, level="ERROR")
 INCLUDE_TASK_PATHS = [
     "auto_weather.celeryapp.tasks.scheduled",
     "auto_weather.celeryapp.tasks.adhoc",
-    "auto_weather.celeryapp.tasks.adhoc.weather",
 ]
 
 celery_app = Celery(

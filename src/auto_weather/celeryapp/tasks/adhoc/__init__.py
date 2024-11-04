@@ -1,3 +1,3 @@
 from __future__ import annotations
 
-from . import demo, weather
+from . import demo, weather, maint
