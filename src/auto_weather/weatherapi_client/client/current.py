@@ -10,6 +10,7 @@ from . import requests
 import httpx
 from loguru import logger as log
 
+
 def get_current_weather(
     location: str = weatherapi_settings.location,
     api_key: str = weatherapi_settings.api_key,
@@ -64,6 +65,9 @@ def get_current_weather(
                         continue
 
     log.debug(f"Response: [{res.status_code}: {res.reason_phrase}]")
+
+    if save_to_db:
+        log.warning("Saving current weather to database is not implemented")
 
     if res.status_code in http_lib.constants.SUCCESS_CODES:
         log.info("Success requesting current weather")

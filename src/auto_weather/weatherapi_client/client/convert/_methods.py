@@ -9,6 +9,7 @@ from auto_weather.domain import (
 
 from loguru import logger as log
 
+
 @log.catch
 def current_weather_dict_to_schema(current_weather_dict: dict):
     current_weather: CurrentWeatherIn = CurrentWeatherIn.model_validate(
@@ -30,11 +31,11 @@ def current_weather_schema_to_model(current_weather_schema: CurrentWeatherIn):
     raise NotImplementedError(
         "Converting current weather schema to database model not yet supported."
     )
-    current_weather_model: CurrentWeatherModel = CurrentWeatherModel(
-        **current_weather_schema.model_dump()
-    )
+    # current_weather_model: CurrentWeatherModel = CurrentWeatherModel(
+    #     **current_weather_schema.model_dump()
+    # )
 
-    return current_weather_model
+    # return current_weather_model
 
 
 @log.catch
