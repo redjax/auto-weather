@@ -38,9 +38,6 @@ def task_weatherapi_current_weather(
         log.debug(
             f"Current weather ({type(current_weather_res)}): {current_weather_res}"
         )
-        print(
-            f"[TEMP] Current weather ({type(current_weather_res)}): {current_weather_res}"
-        )
     except Exception as exc:
         log.error(
             f"({type(exc)}) Error requesting current weather from WeatherAPI. Details: {exc}"

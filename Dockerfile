@@ -11,10 +11,16 @@ WORKDIR /project
 COPY pyproject.toml uv.lock alembic.ini README.md ./
 COPY ./src ./src
 
+FROM base AS stage
+
+COPY --from=base /project /project
+
+WORKDIR /project
+
 RUN uv sync --dev --all-extras && \
     uv pip install -e .
 
-FROM base AS run
+FROM stage AS run
 
 COPY --from=base /project /project
 
@@ -22,7 +28,7 @@ WORKDIR /project
 
 CMD ["echo", "hello, world"]
 
-FROM base AS run_scripts
+FROM stage AS run_scripts
 
 COPY --from=base /project /project
 
@@ -32,7 +38,7 @@ COPY scripts /project/scripts
 
 CMD ["echo", "hello, world"]
 
-FROM base AS alembic
+FROM stage AS alembic
 
 COPY --from=base /project /project
 
