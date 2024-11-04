@@ -4,6 +4,7 @@ from auto_weather.celeryapp.tasks.scheduled.demo import TASK_SCHEDULE_1m_say_hel
 from auto_weather.celeryapp.tasks.scheduled.weather.weatherapi import (
     TASK_SCHEDULE_15m_weatherapi_current_weather,
     TASK_SCHEDULE_test_weatherapi_current_weather,
+    TASK_SCHEDULE_30m_weatherapi_weather_forecast,
 )
 
 from .settings import BACKEND_URL, BROKER_URL, CELERY_SETTINGS
@@ -58,6 +59,7 @@ def scheduled_tasks(sender, **kwargs):
     celery_app.conf.beat_schedule = {
         **TASK_SCHEDULE_1m_say_hello,
         **TASK_SCHEDULE_15m_weatherapi_current_weather,
+        **TASK_SCHEDULE_30m_weatherapi_weather_forecast,
         ## Uncomment to get current weather every minute
         # **TASK_SCHEDULE_test_weatherapi_current_weather,
     }
@@ -94,15 +96,3 @@ def check_task(task_id: str = None, app: Celery = celery_app) -> AsyncResult | N
         log.error(msg)
 
         return None
-
-
-@celery_app.task
-def add(x, y):
-    return x + y
-
-
-@celery_app.task
-def tsum(*args, **kwargs):
-    print(args)
-    print(kwargs)
-    return sum(args[0])
