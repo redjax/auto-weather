@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from celery.schedules import crontab
 
 TASK_SCHEDULE_15m_weatherapi_current_weather = {

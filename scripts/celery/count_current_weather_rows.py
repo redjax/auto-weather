@@ -1,11 +1,8 @@
 from __future__ import annotations
 
-from loguru import logger as log
 import time
 import typing as t
 
-
-from celery.result import AsyncResult
 from auto_weather.celeryapp.celery_main import celery_app, check_task
 from auto_weather.celeryapp.settings import CELERY_SETTINGS
 from auto_weather.celeryapp.tasks.adhoc.weather.weatherapi_tasks import (
@@ -14,6 +11,8 @@ from auto_weather.celeryapp.tasks.adhoc.weather.weatherapi_tasks import (
 from auto_weather.core.setup import setup_database, setup_loguru_logging
 from auto_weather.weatherapi_client.settings import WEATHERAPI_SETTINGS
 
+from celery.result import AsyncResult
+from loguru import logger as log
 
 def run(task_check_sleep: int = 5, location_name: str = None):
     # task_result: AsyncResult = task_count_current_weather_rows.delay()

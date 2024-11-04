@@ -1,19 +1,19 @@
 from __future__ import annotations
+
 from typing import NoReturn
 
 from auto_weather.domain import (
     CurrentWeatherIn,
     CurrentWeatherModel,
     CurrentWeatherOut,
-    LocationIn,
     ForecastJSONIn,
     ForecastJSONModel,
     ForecastJSONOut,
     ForecastJSONRepository,
+    LocationIn,
 )
 
 from loguru import logger as log
-
 
 @log.catch
 def current_weather_dict_to_schema(current_weather_dict: dict):

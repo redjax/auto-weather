@@ -10,7 +10,6 @@ from . import requests
 import httpx
 from loguru import logger as log
 
-
 def get_current_weather(
     location: str = weatherapi_settings.location,
     api_key: str = weatherapi_settings.api_key,

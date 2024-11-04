@@ -3,8 +3,8 @@ from __future__ import annotations
 from auto_weather.celeryapp.tasks.scheduled.demo import TASK_SCHEDULE_1m_say_hello
 from auto_weather.celeryapp.tasks.scheduled.weather.weatherapi import (
     TASK_SCHEDULE_15m_weatherapi_current_weather,
-    TASK_SCHEDULE_test_weatherapi_current_weather,
     TASK_SCHEDULE_30m_weatherapi_weather_forecast,
+    TASK_SCHEDULE_test_weatherapi_current_weather,
 )
 
 from .settings import BACKEND_URL, BROKER_URL, CELERY_SETTINGS

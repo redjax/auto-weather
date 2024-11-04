@@ -2,13 +2,7 @@ from __future__ import annotations
 
 import time
 
-from loguru import logger as log
-
-from auto_weather.weatherapi_client.settings import weatherapi_settings
-
-from . import requests
-from .db_ops import save_forecast, save_location
-
+from auto_weather.core import http_lib
 from auto_weather.domain.location import LocationIn, LocationOut
 from auto_weather.domain.schemas import APIResponseForecastWeather
 from auto_weather.domain.weather.forecast import ForecastJSONIn, ForecastJSONOut
@@ -18,9 +12,13 @@ from auto_weather.domain.weather.weather_alerts import (
     WeatherAlertsIn,
     WeatherAlertsOut,
 )
-from auto_weather.core import http_lib
-import httpx
+from auto_weather.weatherapi_client.settings import weatherapi_settings
 
+from . import requests
+from .db_ops import save_forecast, save_location
+
+import httpx
+from loguru import logger as log
 
 def get_weather_forecast(
     location: str = weatherapi_settings.location,

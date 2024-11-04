@@ -1,28 +1,21 @@
+from __future__ import annotations
+
+from auto_weather import domain, weatherapi_client
 from auto_weather.celeryapp.celery_main import celery_app
+from auto_weather.core.depends.db_depends import get_session_pool
 from auto_weather.domain import (
     CurrentWeatherIn,
-    CurrentWeatherOut,
     CurrentWeatherModel,
+    CurrentWeatherOut,
     CurrentWeatherRepository,
-)
-from auto_weather.domain import (
     LocationIn,
     LocationModel,
     LocationOut,
     LocationRepository,
 )
-
-
-from loguru import logger as log
-
-from auto_weather import weatherapi_client
 from auto_weather.weatherapi_client.settings import weatherapi_settings
 
-from auto_weather.celeryapp.celery_main import celery_app
-from auto_weather.core.depends.db_depends import get_session_pool
-from auto_weather import domain
-from auto_weather import weatherapi_client
-
+from loguru import logger as log
 
 @log.catch
 @celery_app.task(name="weatherapi-current-weather")
