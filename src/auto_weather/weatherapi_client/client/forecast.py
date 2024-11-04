@@ -3,17 +3,29 @@ from __future__ import annotations
 import time
 
 from auto_weather.core import http_lib
+from auto_weather.domain.location import LocationIn, LocationOut
+from auto_weather.domain.schemas import APIResponseForecastWeather
+from auto_weather.domain.weather.forecast import ForecastJSONIn, ForecastJSONOut
+from auto_weather.domain.weather.weather_alerts import (
+    WeatherAlertIn,
+    WeatherAlertOut,
+    WeatherAlertsIn,
+    WeatherAlertsOut,
+)
 from auto_weather.weatherapi_client.settings import weatherapi_settings
 
 from . import requests
+from .db_ops import save_forecast, save_location
 
 import httpx
 from loguru import logger as log
 
-def get_current_weather(
+def get_weather_forecast(
     location: str = weatherapi_settings.location,
+    days: int = 1,
     api_key: str = weatherapi_settings.api_key,
     include_aqi: bool = True,
+    include_alerts: bool = True,
     headers: dict | None = None,
     use_cache: bool = False,
     retry: bool = True,
@@ -22,18 +34,28 @@ def get_current_weather(
     retry_stagger: int = 3,
     save_to_db: bool = True,
 ):
-    current_weather_request: httpx.Request = requests.return_current_weather_request(
-        api_key=api_key, location=location, include_aqi=include_aqi, headers=headers
+    if days > 10:
+        log.warning(
+            f"WeatherAPI only allows 10-day forecasts. {days} is too many, setting to 10."
+        )
+        days: int = 10
+
+    weather_forecast_request: httpx.Request = requests.return_weather_forecast_request(
+        days=days,
+        api_key=api_key,
+        location=location,
+        include_aqi=include_aqi,
+        headers=headers,
     )
 
-    log.info("Requesting current weather")
+    log.info(f"Requesting weather forecast for location: {location}")
 
     with http_lib.get_http_controller(use_cache=use_cache) as http:
         try:
-            res: httpx.Response = http.client.send(current_weather_request)
+            res: httpx.Response = http.client.send(weather_forecast_request)
         except httpx.ReadTimeout as timeout:
             log.warning(
-                f"({type(timeout)}) Operation timed out while requesting current weather."
+                f"({type(timeout)}) Operation timed out while requesting weather forecast."
             )
 
             if not retry:
@@ -50,7 +72,7 @@ def get_current_weather(
                     log.info(f"[Retry {current_attempt}/{max_retries}]")
 
                     try:
-                        res: httpx.Response = http.client.send(current_weather_request)
+                        res: httpx.Response = http.client.send(weather_forecast_request)
                         break
                     except httpx.ReadTimeout as timeout_2:
                         log.warning(
@@ -66,10 +88,10 @@ def get_current_weather(
     log.debug(f"Response: [{res.status_code}: {res.reason_phrase}]")
 
     if save_to_db:
-        log.warning("Saving current weather to database is not implemented")
+        log.warning("Saving weather forecast to database is not implemented")
 
     if res.status_code in http_lib.constants.SUCCESS_CODES:
-        log.info("Success requesting current weather")
+        log.info("Success requesting weather forecast")
         decoded = http_lib.decode_response(response=res)
     elif res.status_code in http_lib.constants.ALL_ERROR_CODES:
         log.warning(f"Error: [{res.status_code}: {res.reason_phrase}]: {res.text}")
@@ -81,5 +103,14 @@ def get_current_weather(
         )
 
         return None
+
+    # log.debug(f"Decoded: {decoded}")
+
+    # location_schema: LocationIn = LocationIn.model_validate(decoded["location"])
+    # forecast_schema = ForecastJSONIn(forecast_json=decoded)
+
+    # api_response = APIResponseForecastWeather(
+    #     forecast=forecast_schema, location=location_schema
+    # )
 
     return decoded

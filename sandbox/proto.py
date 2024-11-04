@@ -42,11 +42,34 @@ def demo_weatherapi_current_weather():
         msg = f"({type(exc)}) Error saving current weather & location to database. Details: {exc}"
         log.error(msg)
 
+    return current_weather
+
+
+def demo_weather_forecast():
+    weather_forecast_res = weatherapi_client.client.forecast.get_weather_forecast()
+
+    log.debug(f"Weather forecast: {weather_forecast_res.keys()}")
+
+    weather_forecast = weatherapi_client.convert.weather_forecast_dict_to_schema(
+        weather_forecast_res["forecast"]
+    )
+    log.debug(f"Weather forecast ({type(weather_forecast)})")  #: {weather_forecast}")
+
+    log.info("Saving weather forecast JSON to database")
+    try:
+        weatherapi_client.client.db_ops.save_forecast(forecast_schema=weather_forecast)
+    except Exception as exc:
+        msg = f"({type(exc)}) Error saving current weather & location to database. Details: {exc}"
+        log.error(msg)
+
+    return weather_forecast
+
 
 def main():
     log.info("Prototype start")
 
-    demo_weatherapi_current_weather()
+    current_weather = demo_weatherapi_current_weather()
+    weather_forecast = demo_weather_forecast()
 
 
 if __name__ == "__main__":

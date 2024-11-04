@@ -3,6 +3,8 @@ from __future__ import annotations
 from auto_weather.celeryapp.tasks.scheduled.demo import TASK_SCHEDULE_1m_say_hello
 from auto_weather.celeryapp.tasks.scheduled.weather.weatherapi import (
     TASK_SCHEDULE_15m_weatherapi_current_weather,
+    TASK_SCHEDULE_30m_weatherapi_weather_forecast,
+    TASK_SCHEDULE_test_weatherapi_current_weather,
 )
 
 from .settings import BACKEND_URL, BROKER_URL, CELERY_SETTINGS
@@ -10,6 +12,9 @@ from .settings import BACKEND_URL, BROKER_URL, CELERY_SETTINGS
 from celery import Celery, current_app
 from celery.result import AsyncResult
 from loguru import logger as log
+
+log.add("logs/celery.log", rotation="15 MB", retention=3)
+log.add("logs/celery.error.log", rotation="15 MB", retention=3, level="ERROR")
 
 INCLUDE_TASK_PATHS = [
     "auto_weather.celeryapp.tasks.scheduled",
@@ -50,10 +55,17 @@ def scheduled_tasks(sender, **kwargs):
         ## This line is so vulture stops warning on unused variable 'sender'
         pass
 
+    if not kwargs:
+        ## This line is so vulture stops warning on unused variable 'kwargs'
+        pass
+
     ## Configure celery beat schedule
     celery_app.conf.beat_schedule = {
         **TASK_SCHEDULE_1m_say_hello,
         **TASK_SCHEDULE_15m_weatherapi_current_weather,
+        **TASK_SCHEDULE_30m_weatherapi_weather_forecast,
+        ## Uncomment to get current weather every minute
+        # **TASK_SCHEDULE_test_weatherapi_current_weather,
     }
 
 
@@ -88,15 +100,3 @@ def check_task(task_id: str = None, app: Celery = celery_app) -> AsyncResult | N
         log.error(msg)
 
         return None
-
-
-@celery_app.task
-def add(x, y):
-    return x + y
-
-
-@celery_app.task
-def tsum(*args, **kwargs):
-    print(args)
-    print(kwargs)
-    return sum(args[0])

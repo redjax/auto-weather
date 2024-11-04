@@ -2,10 +2,7 @@
 
 from __future__ import annotations
 
-from loguru import logger as log
-
 from auto_weather.core import setup
-from auto_weather.core.settings import LOGGING_SETTINGS
 from auto_weather.core.db import Base, create_base_metadata
 from auto_weather.core.db.settings import DB_SETTINGS
 from auto_weather.core.depends.db_depends import (
@@ -13,15 +10,16 @@ from auto_weather.core.depends.db_depends import (
     get_db_uri,
     get_session_pool,
 )
+from auto_weather.core.settings import LOGGING_SETTINGS
 from auto_weather.domain.location import models
 from auto_weather.domain.weather.current import models
 from auto_weather.domain.weather.forecast import models
 from auto_weather.domain.weather.weather_alerts import models
 
+from loguru import logger as log
 import sqlalchemy as sa
 import sqlalchemy.exc as sa_exc
 import sqlalchemy.orm as so
-
 
 def init_pg_database(create_dbs: list[str], engine: sa.Engine = None):
     log.info("START init postgres database")

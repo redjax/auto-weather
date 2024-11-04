@@ -16,7 +16,7 @@ from loguru import logger as log
 
 def run(task_check_sleep: int = 5, location_name: str = None):
     # task_result: AsyncResult = task_count_current_weather_rows.delay()
-    task_result: AsyncResult = celery_app.send_task("weatherapi-current-weather-count")
+    task_result: AsyncResult = celery_app.send_task("weatherapi-forecast-count")
 
     while not check_task(task_id=task_result.task_id, app=celery_app).ready():
         log.info(f"Task {task_result.task_id} is in state [{task_result.state}]")
@@ -35,7 +35,7 @@ def run(task_check_sleep: int = 5, location_name: str = None):
         f"Task {task_result.task_id} ready=True. State: {check_task(task_id=task_result.task_id, app=celery_app).state}"
     )
 
-    log.info("Finish counting current weather rows")
+    log.info("Finish counting weather forecast rows")
 
     if task_result.result is None:
         log.warning("Result is None, an error may have occurred")
