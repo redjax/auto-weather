@@ -38,6 +38,12 @@ services:
 
 The above configuration would create a path `./containers/vols/redis/data`, and mount the Redis container's `/data` path to this directory.
 
+## Note on mounting postgres data directory
+
+If you mount the `postgres` container's `/var/lib/postgresql/data` path to a host volume/local directory, note that the directory will appear empty if you don't have permissions to view it. This is ok! **Don't change the owner of your host volume mount**, it'll break the database.
+
+You can view the contents of that directory with `sudo ls ./containers/vols/postgres/data`.
+
 ## Postgres init script
 
 The [`pg_entrypoint.sh`](./vols/postgres/pg_entrypoint/pg_entrypoint.sh) script is mounted in the `postgres` container and executed when the database is created. This script installs plugins & does any default setup steps you describe.
