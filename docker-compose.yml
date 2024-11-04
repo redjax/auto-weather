@@ -115,8 +115,9 @@ services:
     command: ['uv', 'run', 'celery', '-A', 'auto_weather.celeryapp.celery_main.celery_app', "worker", '-l', 'info']
     environment:
       CELERY_TZ: ${TZ:-Etc/UTC}
-      CELERY_BROKER_URL: amqp://${RABBITMQ_USER:-rabbitmq}:${RABBITMQ_PASSWORD:-rabbitmq}@rabbitmq:5672//
-      CELERY_BACKEND_URL: redis://redis:6379/0
+      DYNACONF_CELERY_BROKER_URL: amqp://${RABBITMQ_USER:-rabbitmq}:${RABBITMQ_PASSWORD:-rabbitmq}@rabbitmq:5672//
+      DYNACONF_CELERY_BACKEND_URL: redis://redis:6379/0
+      DYNACONF_CELERY_LOG_LEVEL: ${CELERY_LOG_LEVEL:-info}
       C_FORCE_ROOT: true
 
       DYNACONF_WEATHERAPI_LOCATION_NAME: ${WEATHERAPI_LOCATION_NAME:-london}
@@ -154,9 +155,9 @@ services:
     command: ['uv', 'run', 'celery', '-A', 'auto_weather.celeryapp.celery_main.celery_app', "beat", '-l', '${CELERY_LOG_LEVEL:-info}']
     environment:
       CELERY_TZ: ${TZ:-Etc/UTC}
-      CELERY_BROKER_URL: amqp://${RABBITMQ_USER:-rabbitmq}:${RABBITMQ_PASSWORD:-rabbitmq}@rabbitmq:5672//
-      CELERY_BACKEND_URL: redis://redis:6379/0
-      CELERY_LOG_LEVEL: ${CELERY_LOG_LEVEL:-info}
+      DYNACONF_CELERY_BROKER_URL: amqp://${RABBITMQ_USER:-rabbitmq}:${RABBITMQ_PASSWORD:-rabbitmq}@rabbitmq:5672//
+      DYNACONF_CELERY_BACKEND_URL: redis://redis:6379/0
+      DYNACONF_CELERY_LOG_LEVEL: ${CELERY_LOG_LEVEL:-info}
       C_FORCE_ROOT: true
 
       DYNACONF_DB_TYPE: ${DB_TYPE:-postgres}
