@@ -201,3 +201,4 @@ site/
 sqlite_backup
 
 .data
+logs/
