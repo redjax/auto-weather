@@ -55,6 +55,10 @@ def scheduled_tasks(sender, **kwargs):
         ## This line is so vulture stops warning on unused variable 'sender'
         pass
 
+    if not kwargs:
+        ## This line is so vulture stops warning on unused variable 'kwargs'
+        pass
+
     ## Configure celery beat schedule
     celery_app.conf.beat_schedule = {
         **TASK_SCHEDULE_1m_say_hello,
