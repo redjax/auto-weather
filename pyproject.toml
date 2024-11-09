@@ -126,4 +126,3 @@ dev = [
     "pytest-xdist>=3.6.1",
     "ruff>=0.7.2",
 ]
-data = []
