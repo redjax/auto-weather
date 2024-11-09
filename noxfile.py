@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import socket
 from contextlib import contextmanager
 import importlib.util
 import logging
@@ -66,6 +67,33 @@ def cd(newdir):
         yield
     finally:
         os.chdir(prevdir)
+
+def find_free_port(host_addr: str = "0.0.0.0", start_port=8000) -> int:
+    """Find a free port starting from a specific port number.
+
+    Params:
+        host_addr (str): The host address to bind to. Default is '0.0.0.0', which can be dangerous.
+        start_port (int): Attempt to bind to this port, and increment 1 each time port binding fails.
+
+    Returns:
+        (int): An open port number, i.e. 8000 if 8001 is in use.
+
+    """
+    port: int = start_port
+
+    ## Loop open port check until one is bound
+    while True:
+        ## Create a socked
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            try:
+                ## Try binding port to host address
+                sock.bind((host_addr, port))
+                return port
+
+            except socket.error:
+                ## Port in use, increment & retry
+                log.info(f"Port {port} is in use, trying the next port.")
+                port += 1
 
 
 def check_path_exists(p: t.Union[str, Path] = None) -> bool:
@@ -510,3 +538,28 @@ def run_pre_commit_autoupdate(session: nox.Session):
     print("Running pre-commit update hook")
     session.run("pre-commit", "run", "pre-commit-update")
     
+
+###########
+# FastAPI #
+###########
+
+@nox.session(name="fastapi-devserver", tags=["fastapi"])
+def run_fastapi_devserver(session: nox.Session):
+    install_uv_project(session)
+    
+    fastapi_api_app = "src/auto_weather/api/api_main.py"
+    port = find_free_port()
+    
+    log.info("Starting FastAPI development server")
+    session.run("fastapi", "dev", fastapi_api_app, "--host", "0.0.0.0", "--port", str(port), "--reload")
+
+
+@nox.session(name="fastapi-prodserver", tags=["fastapi"])
+def run_fastapi_prodserver(session: nox.Session):
+    install_uv_project(session)
+    
+    fastapi_api_app = "src/auto_weather/api/api_main.py"
+    port = find_free_port()
+    
+    log.info("Starting FastAPI production server")
+    session.run("fastapi", "run", fastapi_api_app, "--workers", "4", "--host", "0.0.0.0", "--port", str(port))

@@ -9,6 +9,7 @@ dependencies = [
     "alembic>=1.13.3",
     "celery>=5.4.0",
     "dynaconf>=3.2.6",
+    "fastapi[standard]>=0.115.4",
     "fastparquet>=2024.5.0",
     "hishel>=0.0.33",
     "httpx>=0.27.2",
