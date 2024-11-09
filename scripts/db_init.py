@@ -21,7 +21,6 @@ import sqlalchemy as sa
 import sqlalchemy.exc as sa_exc
 import sqlalchemy.orm as so
 
-
 def init_pg_database(create_dbs: list[str], engine: sa.Engine = None):
     log.info("START init postgres database")
 
