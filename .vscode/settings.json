@@ -9,5 +9,9 @@
             "database": "auto_weather",
             "username": "postgres"
         }
-    ]
+    ],
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter.notebook.ipynb"
+    },
+    "python.terminal.activateEnvironment": false
 }

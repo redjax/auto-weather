@@ -9,10 +9,16 @@ dependencies = [
     "alembic>=1.13.3",
     "celery>=5.4.0",
     "dynaconf>=3.2.6",
+    "fastparquet>=2024.5.0",
     "hishel>=0.0.33",
     "httpx>=0.27.2",
+    "ipykernel>=6.29.5",
+    "jupyter>=1.1.1",
+    "jupyterlab-lsp>=5.1.0",
     "loguru>=0.7.2",
+    "pandas>=2.2.3",
     "psycopg2-binary>=2.9.10",
+    "pyarrow>=18.0.0",
     "pydantic>=2.9.2",
     "redis>=5.2.0",
     "sqlalchemy>=2.0.36",
@@ -116,6 +122,8 @@ section-order = [
 [dependency-groups]
 dev = [
     "nox>=2024.10.9",
+    "pre-commit>=4.0.1",
     "pytest-xdist>=3.6.1",
     "ruff>=0.7.2",
 ]
+data = []

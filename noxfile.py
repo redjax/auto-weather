@@ -42,7 +42,7 @@ VENV_DIR = Path("./.venv").resolve()
 
 ## At minimum, these paths will be checked by your linters
 #  Add new paths with nox_utils.append_lint_paths(extra_paths=["..."],)
-DEFAULT_LINT_PATHS: list[str] = ["src", "tests", "scripts"]
+DEFAULT_LINT_PATHS: list[str] = ["src/", "tests/", "scripts/", "notebooks/"]
 APP_SRC: str = "src/auto_weather"
 ## Set directory for requirements.txt file output
 REQUIREMENTS_OUTPUT_DIR: Path = Path("./")
@@ -466,3 +466,47 @@ def do_alembic_upgrade(session: nox.Session):
 
     log.info("Doing alembic upgrade to apply latest migrations")
     session.run("uv", "run", "alembic", "upgrade", "head")
+
+
+###########
+# Jupyter #
+###########
+
+@nox.session(
+    python=[DEFAULT_PYTHON], name="strip-notebooks", tags=["jupyter", "cleanup"]
+)
+def clear_notebook_output(session: nox.Session):
+    session.install("nbstripout")
+
+    log.info("Gathering all Jupyter .ipynb files")
+    ## Find all Jupyter notebooks in the project
+    notebooks = Path(".").rglob("*.ipynb")
+
+    ## Clear the output of each notebook
+    for notebook in notebooks:
+        log.info(f"Stripping output from notebook '{notebook}'")
+        session.run("nbstripout", str(notebook))
+
+
+##############
+# Pre-commit #
+##############
+
+## Run all pre-commit hooks
+@nox.session(python=PY_VERSIONS, name="pre-commit-all")
+def run_pre_commit_all(session: nox.Session):
+    session.install("pre-commit")
+    session.run("pre-commit")
+
+    print("Running all pre-commit hooks")
+    session.run("pre-commit", "run")
+    
+
+## Automatically update pre-commit hooks on new revisions
+@nox.session(python=PY_VERSIONS, name="pre-commit-update")
+def run_pre_commit_autoupdate(session: nox.Session):
+    session.install(f"pre-commit")
+
+    print("Running pre-commit update hook")
+    session.run("pre-commit", "run", "pre-commit-update")
+    
