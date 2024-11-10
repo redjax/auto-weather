@@ -6,8 +6,9 @@ from auto_weather.api import uvicorn_server
 from loguru import logger as log
 
 if __name__== "__main__":
-    setup.setup_loguru_logging(log_level=LOGGING_SETTINGS.get("LOG_LEVEL", default="INFO"))
-    
+    setup.setup_loguru_logging(log_level=LOGGING_SETTINGS.get("LOG_LEVEL", default="INFO"), add_error_file_logger=True, add_file_logger=True)
+    setup.setup_uvicorn_logging()
+    setup.add_loguru_file_handler("./logs/access.log", level="DEBUG")
     
     try:
         uvicorn_server.run_server(

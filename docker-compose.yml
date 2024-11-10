@@ -91,6 +91,7 @@ services:
       - ./alembic.ini:/project/alembic.ini
       - ./migrations:/project/migrations
       - ./scripts:/project/scripts
+      - ${LOGS_DIR:-./logs}:/project/logs
     environment:
       DYNACONF_LOG_LEVEL: DEBUG
       DYNACONF_DB_TYPE: ${DB_TYPE:-postgres}
@@ -137,7 +138,7 @@ services:
     volumes:
       - ./src:/project/src
       - ./alembic.ini:/project/alembic.ini
-      # - ./logs:/project/logs
+      - ${LOGS_DIR:-./logs}:/project/logs
     depends_on:
       - rabbitmq
       - redis
@@ -176,7 +177,7 @@ services:
     volumes:
       - ./src:/project/src
       - ./alembic.ini:/project/alembic.ini
-      # - ./logs:/project/logs
+      - ${LOGS_DIR:-./logs}:/project/logs
     depends_on:
       - rabbitmq
       - redis
@@ -197,7 +198,7 @@ services:
     command: ['uv', 'run', 'scripts/api/run_uvicorn_server.py']
     environment:
       DYNACONF_LOG_LEVEL: ${LOG_LEVEL:-INFO}
-      
+
       DYNACONF_WEATHERAPI_LOCATION_NAME: ${WEATHERAPI_LOCATION_NAME:-london}
       DYNACONF_WEATHERAPI_API_KEY: ${WEATHERAPI_API_KEY}
       DYNACONF_DB_TYPE: ${DB_TYPE:-postgres}
@@ -223,6 +224,7 @@ services:
     volumes:
       - ./src:/project/src
       - ./scripts:/project/scripts
+      - ${LOGS_DIR:-./logs}:/project/logs
     networks:
       - auto-weathernet
 
