@@ -15,6 +15,17 @@ db_port = ""
 db_database = "db.sqlite3"
 db_echo = false
 
+fastapi_debug = false
+fastapi_title = "FastAPI App"
+fastapi_summary = "Default FastAPI app summary"
+fastapi_description = "Default FastAPI app description"
+fastapi_version = "0.1.0"
+
+uvicorn_log_level = "info"
+uvicorn_reload = false
+uvicorn_host = "127.0.0.1"
+uvicorn_port = 8000
+
 [logging]
 
 # log_level = "DEBUG"
@@ -48,3 +59,18 @@ db_echo = false
 # db_port = 5432
 # db_database = "weather"
 # db_echo = false
+
+[fastapi]
+
+# fastapi_debug = true
+fastapi_title = "auto-weather API"
+fastapi_summary = "Automate requesting & analyzing weather data."
+fastapi_description = "Uses Python Celery to schedule requests to a weather API (weatherapi.com by default), saving the current weather & weather forecast. Serves data via the API."
+fastapi_version = "0.1.0"
+
+[uvicorn]
+
+# uvicorn_log_level = "debug"
+# uvicorn_reload = true
+uvicorn_host = "0.0.0.0"
+# uvicorn_port = 8000
