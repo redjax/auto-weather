@@ -48,3 +48,13 @@ COPY alembic.ini /project/alembic.ini
 COPY migrations /project/migrations
 
 CMD ["echo", "hello, world"]
+
+FROM stage AS api
+
+COPY --from=base /project /project
+
+WORKDIR /project
+
+COPY scripts /project/scripts
+
+CMD ["echo", "hello, world"]

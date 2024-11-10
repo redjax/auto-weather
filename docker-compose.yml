@@ -113,6 +113,7 @@ services:
       args:
         UV_IMAGE_VER: ${UV_IMAGE_VER:-0.4.27}
         PYTHON_IMAGE_VER: ${PYTHON_IMAGE_VER:-3.12-slim}
+      target: run_scripts
     command: ['uv', 'run', 'celery', '-A', 'auto_weather.celeryapp.celery_main.celery_app', "worker", '-l', 'info']
     environment:
       CELERY_TZ: ${TZ:-Etc/UTC}
@@ -153,6 +154,7 @@ services:
       args:
         UV_IMAGE_VER: ${UV_IMAGE_VER:-0.4.27}
         PYTHON_IMAGE_VER: ${PYTHON_IMAGE_VER:-3.12-slim}
+      target: run_scripts
     command: ['uv', 'run', 'celery', '-A', 'auto_weather.celeryapp.celery_main.celery_app', "beat", '-l', '${CELERY_LOG_LEVEL:-info}']
     environment:
       CELERY_TZ: ${TZ:-Etc/UTC}
@@ -179,6 +181,48 @@ services:
       - rabbitmq
       - redis
       - postgres
+    networks:
+      - auto-weathernet
+
+  api:
+    container_name: auto-weather-api
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        UV_IMAGE_VER: ${UV_IMAGE_VER:-0.4.27}
+        PYTHON_IMAGE_VER: ${PYTHON_IMAGE_VER:-3.12-slim}
+      target: api
+    command: ['uv', 'run', 'scripts/api/run_uvicorn_server.py']
+    environment:
+      DYNACONF_LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      
+      DYNACONF_WEATHERAPI_LOCATION_NAME: ${WEATHERAPI_LOCATION_NAME:-london}
+      DYNACONF_WEATHERAPI_API_KEY: ${WEATHERAPI_API_KEY}
+      DYNACONF_DB_TYPE: ${DB_TYPE:-postgres}
+      DYNACONF_DB_DRIVERNAME: ${DB_DRIVERNAME:-postgresql+psycopg2}
+      DYNACONF_DB_HOST: ${DB_HOST:-postgres}
+      DYNACONF_DB_PORT: ${DB_PORT:-5432}
+      DYNACONF_DB_NAME: ${DB_NAME:-auto_weather}
+      DYNACONF_DB_USERNAME: ${POSTGRES_USER:-postgres}
+      DYNACONF_DB_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+
+      DYNACONF_FASTAPI_DEBUG: ${FASTAPI_DEBUG:-false}
+      DYNACONF_FASTAPI_TITLE: ${FASTAPI_TITLE:-"auto-weather API"}
+      DYNACONF_FASTAPI_SUMMARY: ${FASTAPI_SUMMARY:-"API for the automated weather data app."}
+      DYNACONF_FASTAPI_DESCRIPTION: ${FASTAPI_DESCRIPTION:-""}
+      DYNACONF_FASTAPI_VERSION: ${FASTAPI_VERSION:-"0.1.0"}
+
+      DYNACONF_UVICORN_LOG_LEVEL: ${UVICORN_LOG_LEVEL:-info}
+      DYNACONF_UVICORN_RELOAD: ${UVICORN_RELOAD:-false}
+      DYNACONF_UVICORN_HOST: ${UVICORN_HOST:-"0.0.0.0"}
+      DYNACONF_UVICORN_PORT: ${UVICORN_PORT:-8000}
+    ports:
+      - ${UVICORN_HOST_PORT:-8000}:${UVICORN_PORT:-8000}
+    volumes:
+      - ./src:/project/src
+      - ./scripts:/project/scripts
     networks:
       - auto-weathernet
 
