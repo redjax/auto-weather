@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import socket
 from contextlib import contextmanager
 import importlib.util
 import logging
@@ -8,6 +7,7 @@ import os
 from pathlib import Path
 import platform
 import shutil
+import socket
 import sys
 import typing as t
 

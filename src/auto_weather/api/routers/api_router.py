@@ -1,5 +1,8 @@
-from fastapi import APIRouter
+from __future__ import annotations
+
 from .weather import api_router as weather_api_router
+
+from fastapi import APIRouter
 
 router = APIRouter(prefix="/api/v1")
 

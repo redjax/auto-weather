@@ -1,11 +1,13 @@
-import typing as t
+from __future__ import annotations
 
-import uvicorn
-from loguru import logger as log
-from dynaconf import Dynaconf
+import typing as t
 
 from auto_weather.api.settings import UVICORN_SETTINGS
 from auto_weather.core import setup
+
+from dynaconf import Dynaconf
+from loguru import logger as log
+import uvicorn
 
 def run_server(host: str = "127.0.0.1", port: int = 8000, reload: bool = False, log_level: str =    "info"):
     try:
