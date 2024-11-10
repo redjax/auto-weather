@@ -19,7 +19,7 @@ def run_server(host: str = "127.0.0.1", port: int = 8000, reload: bool = False, 
 if __name__ == "__main__":
     setup.setup_loguru_logging()
     
-    log.debug(f"Uvicorn settings: {UVICORN_SETTINGS.as_dict()}")
+    print(f"Uvicorn settings: {UVICORN_SETTINGS.as_dict()}")
     
     host=UVICORN_SETTINGS.get("UVICORN_HOST", default="127.0.0.1")
     port=UVICORN_SETTINGS.get("UVICORN_PORT", default=8000)
