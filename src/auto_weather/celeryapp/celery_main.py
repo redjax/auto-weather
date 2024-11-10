@@ -13,9 +13,6 @@ from celery import Celery, current_app
 from celery.result import AsyncResult
 from loguru import logger as log
 
-log.add("logs/celery.log", rotation="15 MB", retention=3)
-log.add("logs/celery.error.log", rotation="15 MB", retention=3, level="ERROR")
-
 INCLUDE_TASK_PATHS = [
     "auto_weather.celeryapp.tasks.scheduled",
     "auto_weather.celeryapp.tasks.adhoc",

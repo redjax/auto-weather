@@ -21,6 +21,7 @@ router = APIRouter(prefix="/stats", tags=["stats"])
 def return_current_weather_count():
     try:
         current_weather_count = weatherapi_client.client.current.get_current_weather_count()
+        print(f"Current weather count ({type(current_weather_count)}): {current_weather_count}")
         return JSONResponse(status_code=status.HTTP_200_OK, content=jsonable_encoder({"current_weather_count": current_weather_count}))
     except Exception as exc:
         log.error(exc)

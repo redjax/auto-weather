@@ -3,6 +3,7 @@ from __future__ import annotations
 import time
 
 from auto_weather.core import http_lib
+from auto_weather.core.db.settings import DB_SETTINGS
 from auto_weather.core.depends import db_depends
 from auto_weather.weatherapi_client.settings import weatherapi_settings
 from auto_weather.domain import CurrentWeatherRepository
@@ -11,6 +12,7 @@ from . import requests
 
 import httpx
 from loguru import logger as log
+
 
 def get_current_weather(
     location: str = weatherapi_settings.location,
@@ -95,6 +97,7 @@ def get_current_weather_count() -> int:
             repo = CurrentWeatherRepository(session=session)
             
             current_weather_count = repo.count()
+            
             return current_weather_count
     except Exception as exc:
         msg = f"({type(exc)}) Error getting current weather count. Details: {exc}"

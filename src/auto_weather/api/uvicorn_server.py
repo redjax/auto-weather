@@ -36,8 +36,6 @@ if __name__ == "__main__":
     # setup.add_loguru_file_handler("./logs/celery.log", level="DEBUG")
     # setup.add_loguru_file_handler("./logs/celery.error.log", level="ERROR")
     
-    print(f"Uvicorn settings: {UVICORN_SETTINGS.as_dict()}")
-    
     host=UVICORN_SETTINGS.get("UVICORN_HOST", default="127.0.0.1")
     port=UVICORN_SETTINGS.get("UVICORN_PORT", default=8000)
     reload=UVICORN_SETTINGS.get("UVICORN_RELOAD", default=False)
