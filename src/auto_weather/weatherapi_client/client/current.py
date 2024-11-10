@@ -3,7 +3,9 @@ from __future__ import annotations
 import time
 
 from auto_weather.core import http_lib
+from auto_weather.core.depends import db_depends
 from auto_weather.weatherapi_client.settings import weatherapi_settings
+from auto_weather.domain import CurrentWeatherRepository
 
 from . import requests
 
@@ -83,3 +85,19 @@ def get_current_weather(
         return None
 
     return decoded
+
+
+def get_current_weather_count() -> int:
+    session_pool = db_depends.get_session_pool()
+    
+    try:
+        with session_pool() as session:
+            repo = CurrentWeatherRepository(session=session)
+            
+            current_weather_count = repo.count()
+            return current_weather_count
+    except Exception as exc:
+        msg = f"({type(exc)}) Error getting current weather count. Details: {exc}"
+        log.error(msg)
+        
+        return None

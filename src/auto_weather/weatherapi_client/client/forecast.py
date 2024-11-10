@@ -3,9 +3,10 @@ from __future__ import annotations
 import time
 
 from auto_weather.core import http_lib
+from auto_weather.core.depends import db_depends
 from auto_weather.domain.location import LocationIn, LocationOut
 from auto_weather.domain.schemas import APIResponseForecastWeather
-from auto_weather.domain.weather.forecast import ForecastJSONIn, ForecastJSONOut
+from auto_weather.domain.weather.forecast import ForecastJSONIn, ForecastJSONOut, ForecastJSONRepository
 from auto_weather.domain.weather.weather_alerts import (
     WeatherAlertIn,
     WeatherAlertOut,
@@ -114,3 +115,19 @@ def get_weather_forecast(
     # )
 
     return decoded
+
+
+def get_weather_forecast_count() -> int:
+    session_pool = db_depends.get_session_pool()
+    
+    try:
+        with session_pool() as session:
+            repo = ForecastJSONRepository(session=session)
+            
+            weather_forecast_count = repo.count()
+            return weather_forecast_count
+    except Exception as exc:
+        msg = f"({type(exc)}) Error getting weather forecast count. Details: {exc}"
+        log.error(msg)
+        
+        return None
