@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from celery import shared_task
-
 from auto_weather import domain, weatherapi_client
 from auto_weather.celeryapp.celery_main import celery_app
 from auto_weather.core.depends.db_depends import get_session_pool
@@ -17,8 +15,8 @@ from auto_weather.domain import (
 )
 from auto_weather.weatherapi_client.settings import weatherapi_settings
 
+from celery import shared_task
 from loguru import logger as log
-
 
 @log.catch
 # @celery_app.task(name="weatherapi-current-weather")
@@ -29,8 +27,7 @@ def task_weatherapi_current_weather(
     location: str = weatherapi_settings.location,
 ):
     """Request & save current weather from WeatherAPI."""
-    print(f"API key: {api_key}, location: {location}")
-
+    log.info(f"Running celery task to get current weather from WeatherAPI")
     try:
         current_weather_res = weatherapi_client.client.current.get_current_weather(
             api_key=api_key, location=location, use_cache=use_cache
